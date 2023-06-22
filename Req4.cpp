@@ -85,6 +85,7 @@ void ToggleEditMode()
 
 void UpdateGrid()
 {
+
     if (editMode)
     {
         int mouseGridX = GetMouseX() / cellSize;
@@ -92,19 +93,20 @@ void UpdateGrid()
 
         if (mouseGridX >= 0 && mouseGridX < gridSizeX && mouseGridY >= 0 && mouseGridY < gridSizeY)
         {
-            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+            if (IsMouseButtonDown(MOUSE_LEFT_BUTTON))
             {
-                gridColors[mouseGridY][mouseGridX] = RED;//{(230,41,55,255)
+                gridColors[mouseGridY][mouseGridX] = RED;
             }
-            else if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON))
+            else if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
             {
-                if (ColorToInt(gridColors[mouseGridY][mouseGridX]) == ColorToInt(RED))
+                if (ColorToInt(gridColors[mouseGridY][mouseGridX]) != ColorToInt(RED))
                 {
                     gridColors[mouseGridY][mouseGridX] = { 184, 237, 255, 255 }; //celeste
                 }
             }
         }
     }
+
     else
     {
         int mouseGridX = GetMouseX() / cellSize;
