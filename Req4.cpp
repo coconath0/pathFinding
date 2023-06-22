@@ -26,7 +26,7 @@ bool showEditIndicator = false;
 
 int distanceMap[100][100];
 
-bool pathCalculating = false;
+/* bool pathCalculating = false; */
 
 void InitializeGrid()
 {
