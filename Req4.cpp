@@ -242,7 +242,11 @@ void UpdateGrid()
                         y++;
                     }
 
-                    gridColors[y][x] = BLUE;
+                    if (x != originX || y != originY)
+                    {
+                        gridColors[y][x] = BLUE;
+                    }
+                    //gridColors[y][x] = BLUE;
                 }
             }
         }
