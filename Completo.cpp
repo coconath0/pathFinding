@@ -350,7 +350,7 @@ void UpdateGrid()
                     }
                 }
 
-                // Pintar la ruta con color azul (#0000ff)
+                // Pintar la ruta con color morado
                 int x = destinationX;
                 int y = destinationY;
                 while (x != originX || y != originY)
