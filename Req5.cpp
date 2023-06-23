@@ -4,7 +4,7 @@
 
 const int screenWidth = 800;
 const int screenHeight = 800;
-const int cellSize = 20;
+const int cellSize = 10;
 
 int gridSizeX;
 int gridSizeY;
