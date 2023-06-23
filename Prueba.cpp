@@ -1,5 +1,17 @@
 #include <raylib.h>
 
+void DrawRedSquare(Rectangle square)
+{
+    Color red = RED;
+    DrawRectangleRec(square, red);
+}
+
+void DrawBlueSquare(Rectangle square)
+{
+    Color blue = BLUE;
+    DrawRectangleRec(square, blue);
+}
+
 int main()
 {
     const int screenWidth = 800;
@@ -9,8 +21,6 @@ int main()
 
     Rectangle redSquare = { 100, 50, 200, 200 };
     Rectangle blueSquare = { 100, 450, 200, 200 };
-    Color red = RED;
-    Color blue = BLUE;
 
     bool isRedVisible = true;
     bool isBlueVisible = false;
@@ -37,12 +47,12 @@ int main()
 
         if (isRedVisible)
         {
-            DrawRectangleRec(redSquare, red);
+            DrawRedSquare(redSquare);
         }
 
         if (isBlueVisible)
         {
-            DrawRectangleRec(blueSquare, blue);
+            DrawBlueSquare(blueSquare);
         }
 
         EndDrawing();
