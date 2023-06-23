@@ -1,6 +1,7 @@
 #include <raylib.h>
 #include <queue>
 #include <climits>
+#include <cmath>
 
 const int screenWidth = 800;
 const int screenHeight = 800;
@@ -281,7 +282,7 @@ void UpdateGrid()
                 while (!q.empty())
                 {
                     std::pair<int, std::pair<int, int>> current = q.top();
-                    int f = current.first;
+                    //int f = current.first;
                     int x = current.second.first;
                     int y = current.second.second;
                     q.pop();
@@ -375,7 +376,7 @@ void UpdateGrid()
 
                     if (x != originX || y != originY)
                     {
-                        gridColors[y][x] = BLUE;
+                        gridColors[y][x] = PURPLE;
                     }
                 }
             }
