@@ -82,6 +82,7 @@ void ToggleEditMode()
         showEditIndicator = editMode;
     }
 }
+
 void Algoritmo1(){
 
     dijkstraActive = true;
@@ -324,7 +325,7 @@ void UpdateGrid()
             {
                 gridColors[mouseGridY][mouseGridX] = RED;
             }
-            else if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON))
+            else if (IsMouseButtonReleased(MOUSE_RIGHT_BUTTON))
             {
                 if (ColorToInt(gridColors[mouseGridY][mouseGridX]) != ColorToInt(RED))
                 {
@@ -333,6 +334,7 @@ void UpdateGrid()
             }
         }
     }
+    
     else
     {
         int mouseGridX = GetMouseX() / cellSize;
