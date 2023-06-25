@@ -6,5 +6,3 @@ Al hacer click derecho en una casilla, esta se desbloqueará (podrá ser parte d
 4. Al presionar la tecla ENTER y tener seleccionadas las casillas de origen y destino, la aplicación deberá de pintar la ruta entre el origen y destino. Las casillas pertenecientes a esta ruta deberá de pintarlas con el color azul (#0000ff). La ruta la debe realizar siguiendo el algoritmo de la lista 1.
 5. Al presionar la tecla ESPACIO y tener seleccionadas las casillas de origen y destino, la aplicación deberá de pintar la ruta entre el origen y destino. Las casillas pertenecientes a esta ruta deberá de pintarlas con el color azul (#0000ff). La ruta la debe realizar siguiendo el algoritmo de la lista 2.
 6. Al presionar la tecla ESC, la aplicación deberá de reiniarse a su estado inicial (todas las casillas desbloqueadas y de celeste claro).
-hola
-klñ{}
