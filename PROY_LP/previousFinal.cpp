@@ -27,6 +27,9 @@ bool showEditIndicator = false;
 
 int distanceMap[100][100];
 
+bool dijkstraActive = false;
+bool focusedDStarActive = false;
+
 void InitializeGrid()
 {
     // Inicializar el mapa de distancias
@@ -96,8 +99,12 @@ void ClearNonTargetCells()
     }
 }
 
+
 void Algoritmo1()
 {
+
+    dijkstraActive = true;
+    focusedDStarActive = false;
 
     ClearNonTargetCells();
 
@@ -201,6 +208,9 @@ void Algoritmo1()
 
 void Algoritmo2()
 {
+
+    dijkstraActive = false;
+    focusedDStarActive = true;
     
     ClearNonTargetCells();
 
@@ -325,6 +335,30 @@ void Algoritmo2()
     }
 }
 
+void ResetDStar()
+{
+    // Restablecer todas las celdas del mapa de distancias a 0
+    for (int y = 0; y < gridSizeY; y++)
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            distanceMap[y][x] = 0;
+        }
+    }
+}
+
+void ResetDijkstra()
+{
+    // Restablecer todas las celdas del mapa de distancias a INT_MAX
+    for (int y = 0; y < gridSizeY; y++)
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            distanceMap[y][x] = INT_MAX;
+        }
+    }
+}
+
 void UpdateGrid()
 {
     if (editMode)
@@ -405,10 +439,12 @@ void UpdateGrid()
             Algoritmo2();
         }
     }
+
 }
 
 int main()
 {
+
     // Inicializar la ventana
     InitWindow(screenWidth, screenHeight, "Pathfinding App");
 
@@ -420,6 +456,8 @@ int main()
     InitializeGrid();
 
     bool restart = false;
+    bool dijkstraActive = false;
+    bool focusedDStarActive = false;
 
     while (!restart)
     {
@@ -428,16 +466,37 @@ int main()
 
         if (IsKeyPressed(KEY_ENTER))
         {
-            Algoritmo1();
+            if (!dijkstraActive)
+            {
+                ResetDStar(); // Restablecer el estado del algoritmo 2
+                dijkstraActive = true;
+                focusedDStarActive = false;
+            }
         }
 
         if (IsKeyPressed(KEY_SPACE))
         {
-            Algoritmo2();
+            if (!focusedDStarActive)
+            {
+                ResetDijkstra(); // Restablecer el estado del algoritmo 1
+                dijkstraActive = false;
+                focusedDStarActive = true;
+            }
         }
 
         BeginDrawing();
+        ClearBackground(RAYWHITE);
         DrawGrid();
+
+        if (dijkstraActive)
+        {
+            Algoritmo1();
+        }
+
+        if (focusedDStarActive)
+        {
+            Algoritmo2();
+        }
 
         // Requerimiento 6: Reiniciar el grid
         if (IsKeyPressed(KEY_ESCAPE))
@@ -449,6 +508,10 @@ int main()
             destinationY = -1;
             editMode = false;
             showEditIndicator = false;
+            ResetDijkstra(); // Restablecer el estado del algoritmo 1
+            ResetDStar();    // Restablecer el estado del algoritmo 2
+            dijkstraActive = false;
+            focusedDStarActive = false;
         }
 
         // Cerrar la ventana
