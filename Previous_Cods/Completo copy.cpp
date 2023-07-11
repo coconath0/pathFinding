@@ -83,7 +83,8 @@ void ToggleEditMode()
     }
 }
 
-void Algoritmo1(){
+void Algoritmo1()
+{
 
     dijkstraActive = true;
     focusedDStarActive = false;
@@ -186,7 +187,8 @@ void Algoritmo1(){
     }
 }
 
-void Algoritmo2(){
+void Algoritmo2()
+{
 
     dijkstraActive = false;
     focusedDStarActive = true;
@@ -213,7 +215,7 @@ void Algoritmo2(){
     while (!q.empty())
     {
         std::pair<int, std::pair<int, int>> current = q.top();
-        //int f = current.first;
+        // int f = current.first;
         int x = current.second.first;
         int y = current.second.second;
         q.pop();
@@ -312,6 +314,30 @@ void Algoritmo2(){
     }
 }
 
+void ResetDStar()
+{
+    // Restablecer todas las celdas del mapa de distancias a 0
+    for (int y = 0; y < gridSizeY; y++)
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            distanceMap[y][x] = 0;
+        }
+    }
+}
+
+void ResetDijkstra()
+{
+    // Restablecer todas las celdas del mapa de distancias a INT_MAX
+    for (int y = 0; y < gridSizeY; y++)
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            distanceMap[y][x] = INT_MAX;
+        }
+    }
+}
+
 void UpdateGrid()
 {
     if (editMode)
@@ -327,14 +353,13 @@ void UpdateGrid()
             }
             else if (IsMouseButtonReleased(MOUSE_RIGHT_BUTTON))
             {
-                if (ColorToInt(gridColors[mouseGridY][mouseGridX]) != ColorToInt(RED))
+                if (gridColors[mouseGridY][mouseGridX].r != 255 || gridColors[mouseGridY][mouseGridX].g != 0 || gridColors[mouseGridY][mouseGridX].b != 0)
                 {
-                    gridColors[mouseGridY][mouseGridX] = {184, 237, 255, 255}; //celeste
+                    gridColors[mouseGridY][mouseGridX] = {184, 237, 255, 255}; // celeste
                 }
             }
         }
     }
-    
     else
     {
         int mouseGridX = GetMouseX() / cellSize;
@@ -374,25 +399,26 @@ void UpdateGrid()
                 }
             }
         }
+    }
 
-        // Verificar si se ha presionado la tecla Enter
-        if (IsKeyPressed(KEY_ENTER))
+    // Verificar si se ha presionado la tecla Enter
+    if (IsKeyPressed(KEY_ENTER))
+    {
+        if (originX != -1 && originY != -1 && destinationX != -1 && destinationY != -1)
         {
-            if (originX != -1 && originY != -1 && destinationX != -1 && destinationY != -1)
-            {
-                Algoritmo1();
-            }
-        }
-
-        // Verificar si se ha presionado la tecla ESPACE
-        if (IsKeyPressed(KEY_SPACE))
-        {
-            if (originX != -1 && originY != -1 && destinationX != -1 && destinationY != -1)
-            {
-                Algoritmo2();
-            }
+            Algoritmo1();
         }
     }
+
+    // Verificar si se ha presionado la tecla ESPACE
+    if (IsKeyPressed(KEY_SPACE))
+    {
+        if (originX != -1 && originY != -1 && destinationX != -1 && destinationY != -1)
+        {
+            Algoritmo2();
+        }
+    }
+
 }
 
 int main()
@@ -406,6 +432,8 @@ int main()
     InitializeGrid();
 
     bool restart = false;
+    bool dijkstraActive = false;
+    bool focusedDStarActive = false;
 
     while (!restart)
     {
@@ -413,29 +441,40 @@ int main()
         UpdateGrid();
 
         if (IsKeyPressed(KEY_ENTER))
-        {   
-            dijkstraActive = true;
-            focusedDStarActive = false;
+        {
+            if (!dijkstraActive)
+            {
+                ResetDStar(); // Restablecer el estado del algoritmo 2
+                dijkstraActive = true;
+                focusedDStarActive = false;
+            }
         }
-        
+
         if (IsKeyPressed(KEY_SPACE))
         {
-            dijkstraActive = false;
-            focusedDStarActive = true;
+            if (!focusedDStarActive)
+            {
+                ResetDijkstra(); // Restablecer el estado del algoritmo 1
+                dijkstraActive = false;
+                focusedDStarActive = true;
+            }
         }
 
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+        DrawGrid();
 
         if (dijkstraActive)
-        {   
+        {
             Algoritmo1();
         }
-        
+
         if (focusedDStarActive)
         {
             Algoritmo2();
         }
-        
 
+        // Requerimiento 6: Reiniciar el grid
         if (IsKeyPressed(KEY_ESCAPE))
         {
             InitializeGrid();
@@ -445,17 +484,17 @@ int main()
             destinationY = -1;
             editMode = false;
             showEditIndicator = false;
+            ResetDijkstra(); // Restablecer el estado del algoritmo 1
+            ResetDStar();    // Restablecer el estado del algoritmo 2
+            dijkstraActive = false;
+            focusedDStarActive = false;
         }
 
+        // Cerrar la ventana
         if (IsKeyPressed(KEY_LEFT_SHIFT))
         {
             CloseWindow();
         }
-
-        BeginDrawing();
-        ClearBackground(RAYWHITE);
-
-        DrawGrid();
 
         EndDrawing();
     }
