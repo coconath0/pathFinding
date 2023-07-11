@@ -444,7 +444,10 @@ void UpdateGrid()
 
 int main()
 {
+
+    // Inicializar la ventana
     InitWindow(screenWidth, screenHeight, "Pathfinding App");
+
     SetTargetFPS(60);
 
     gridSizeX = screenWidth / cellSize;
