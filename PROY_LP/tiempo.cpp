@@ -523,7 +523,7 @@ int main()
             auto startTime = std::chrono::high_resolution_clock::now();
             Dijkstra();
             int countColor1 = CountGridsColor1(); // Obtener recuento de grids de color 1
-            std::cout << "\033[1;36mCantidad de celdas pintadas del color del algoritmo 1: " << countColor1 << "\033[0m" << std::endl;
+            std::cout << "Cantidad de celdas pintadas del color del algoritmo 1: " << countColor1 << std::endl;
             auto endTime = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
             std::cout << "\033[1;36mTiempo de ejecucion de Dijkstra: " << duration << " microsegundos\033[0m" << std::endl;
@@ -534,7 +534,7 @@ int main()
             auto startTime = std::chrono::high_resolution_clock::now();
             FocussedD();
             int countColor2 = CountGridsColor2();
-            std::cout << "\033[1;35mCantidad de celdas pintadas del color del algoritmo 2: " << countColor2 << "\033[0m" << std::endl; // Obtener recuento de grids de color 2
+            std::cout << "Cantidad de celdas pintadas del color del algoritmo 2: " << countColor2 << std::endl; // Obtener recuento de grids de color 2
             auto endTime = std::chrono::high_resolution_clock::now();
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
             std::cout << "\033[1;35mTiempo de ejecucion de FocussedD: " << duration << " microsegundos\033[0m" << std::endl;

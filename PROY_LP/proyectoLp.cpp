@@ -2,6 +2,79 @@
 #include <queue>
 #include <climits>
 #include <cmath>
+#include <chrono>
+#include <iostream>
+
+struct Node
+{
+    int x;
+    int y;
+    Node* next;
+};
+
+class LinkedList
+{
+private:
+    Node* head;
+    Node* tail;
+
+public:
+    LinkedList()
+    {
+        head = nullptr;
+        tail = nullptr;
+    }
+
+    void Append(int x, int y)
+    {
+        Node* newNode = new Node;
+        newNode->x = x;
+        newNode->y = y;
+        newNode->next = nullptr;
+
+        if (head == nullptr)
+        {
+            head = newNode;
+            tail = newNode;
+        }
+        else
+        {
+            tail->next = newNode;
+            tail = newNode;
+        }
+    }
+
+    bool IsEmpty()
+    {
+        return head == nullptr;
+    }
+
+    void RemoveHead()
+    {
+        if (head == nullptr)
+            return;
+
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+    }
+
+    int GetHeadX()
+    {
+        if (head != nullptr)
+            return head->x;
+
+        return -1;
+    }
+
+    int GetHeadY()
+    {
+        if (head != nullptr)
+            return head->y;
+
+        return -1;
+    }
+};
 
 const int screenWidth = 800;
 const int screenHeight = 800;
@@ -26,6 +99,9 @@ int editIndicatorY = screenHeight - editIndicatorSize - 5;
 bool showEditIndicator = false;
 
 int distanceMap[100][100];
+
+int blueCount = 0;
+int purpleCount = 0;
 
 void InitializeGrid()
 {
@@ -87,8 +163,8 @@ void ClearNonTargetCells()
         for (int x = 0; x < gridSizeX; x++)
         {
             if (!((gridColors[y][x].r == 230 && gridColors[y][x].g == 41 && gridColors[y][x].b == 55) ||
-                (gridColors[y][x].r == 0 && gridColors[y][x].g == 228 && gridColors[y][x].b == 48) ||
-                (gridColors[y][x].r == 253 && gridColors[y][x].g == 249 && gridColors[y][x].b == 0)))
+                  (gridColors[y][x].r == 0 && gridColors[y][x].g == 228 && gridColors[y][x].b == 48) ||
+                  (gridColors[y][x].r == 253 && gridColors[y][x].g == 249 && gridColors[y][x].b == 0)))
             {
                 gridColors[y][x] = {184, 237, 255, 255}; // celeste
             }
@@ -96,12 +172,11 @@ void ClearNonTargetCells()
     }
 }
 
-void Algoritmo1()
+void Dijkstra() // Dijkstra
 {
-
     ClearNonTargetCells();
 
-    std::queue<std::pair<int, int>> q;
+    LinkedList queue;
     int distanceMap[100][100];
 
     // Inicializar el mapa de distancias
@@ -117,29 +192,28 @@ void Algoritmo1()
     distanceMap[originY][originX] = 0;
 
     // Agregar el origen a la cola
-    q.push(std::make_pair(originX, originY));
+    queue.Append(originX, originY);
 
     // Algoritmo de búsqueda de ruta utilizando Dijkstra
-    while (!q.empty())
+    while (!queue.IsEmpty())
     {
-        std::pair<int, int> current = q.front();
-        int x = current.first;
-        int y = current.second;
-        q.pop();
+        int x = queue.GetHeadX();
+        int y = queue.GetHeadY();
+        queue.RemoveHead();
 
         // Verificar si la casilla actual es roja
         if (gridColors[y][x].r == 230 && gridColors[y][x].g == 41 && gridColors[y][x].b == 55)
         {
             continue; // Saltar a la siguiente iteración sin expandir los vecinos
         }
-
+        
         // Verificar casillas adyacentes
         if (x > 0 && distanceMap[y][x - 1] == INT_MAX)
         {
             if (gridColors[y][x - 1].r != 230 || gridColors[y][x - 1].g != 41 || gridColors[y][x - 1].b != 55)
             {
                 distanceMap[y][x - 1] = distanceMap[y][x] + 1;
-                q.push(std::make_pair(x - 1, y));
+                queue.Append(x - 1, y);
             }
         }
         if (x < gridSizeX - 1 && distanceMap[y][x + 1] == INT_MAX)
@@ -147,7 +221,7 @@ void Algoritmo1()
             if (gridColors[y][x + 1].r != 230 || gridColors[y][x + 1].g != 41 || gridColors[y][x + 1].b != 55)
             {
                 distanceMap[y][x + 1] = distanceMap[y][x] + 1;
-                q.push(std::make_pair(x + 1, y));
+                queue.Append(x + 1, y);
             }
         }
         if (y > 0 && distanceMap[y - 1][x] == INT_MAX)
@@ -155,7 +229,7 @@ void Algoritmo1()
             if (gridColors[y - 1][x].r != 230 || gridColors[y - 1][x].g != 41 || gridColors[y - 1][x].b != 55)
             {
                 distanceMap[y - 1][x] = distanceMap[y][x] + 1;
-                q.push(std::make_pair(x, y - 1));
+                queue.Append(x, y - 1);
             }
         }
         if (y < gridSizeY - 1 && distanceMap[y + 1][x] == INT_MAX)
@@ -163,7 +237,7 @@ void Algoritmo1()
             if (gridColors[y + 1][x].r != 230 || gridColors[y + 1][x].g != 41 || gridColors[y + 1][x].b != 55)
             {
                 distanceMap[y + 1][x] = distanceMap[y][x] + 1;
-                q.push(std::make_pair(x, y + 1));
+                queue.Append(x, y + 1);
             }
         }
     }
@@ -199,9 +273,8 @@ void Algoritmo1()
     }
 }
 
-void Algoritmo2()
+void FocussedD() // D* Focussed
 {
-    
     ClearNonTargetCells();
 
     std::priority_queue<std::pair<int, std::pair<int, int>>> q;
@@ -325,6 +398,42 @@ void Algoritmo2()
     }
 }
 
+int CountGridsColor1()
+{
+    int count = 0;
+
+    for (int y = 0; y < gridSizeY; y++)
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            if (gridColors[y][x].r == 0 && gridColors[y][x].g == 121 && gridColors[y][x].b == 241 && gridColors[y][x].a == 255)
+            {
+                count++;
+            }
+        }
+    }
+
+    return count;
+}
+
+int CountGridsColor2()
+{
+    int count = 0;
+
+    for (int y = 0; y < gridSizeY; y++)
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            if (gridColors[y][x].r == 200 && gridColors[y][x].g == 122 && gridColors[y][x].b == 255 && gridColors[y][x].a == 255)
+            {
+                count++;
+            }
+        }
+    }
+
+    return count;
+}
+
 void UpdateGrid()
 {
     if (editMode)
@@ -387,25 +496,8 @@ void UpdateGrid()
             }
         }
     }
-
-    // Verificar si se ha presionado la tecla Enter
-    if (IsKeyPressed(KEY_ENTER))
-    {
-        if (originX != -1 && originY != -1 && destinationX != -1 && destinationY != -1)
-        {
-            Algoritmo1();
-        }
-    }
-
-    // Verificar si se ha presionado la tecla ESPACE
-    if (IsKeyPressed(KEY_SPACE))
-    {
-        if (originX != -1 && originY != -1 && destinationX != -1 && destinationY != -1)
-        {
-            Algoritmo2();
-        }
-    }
 }
+
 
 int main()
 {
@@ -428,12 +520,24 @@ int main()
 
         if (IsKeyPressed(KEY_ENTER))
         {
-            Algoritmo1();
+            auto startTime = std::chrono::high_resolution_clock::now();
+            Dijkstra();
+            int countColor1 = CountGridsColor1(); // Obtener recuento de grids de color 1
+            std::cout << "\033[1;36mCantidad de celdas pintadas del color del algoritmo 1: " << countColor1 << "\033[0m" << std::endl;
+            auto endTime = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
+            std::cout << "\033[1;36mTiempo de ejecucion de Dijkstra: " << duration << " microsegundos\033[0m" << std::endl;
         }
 
         if (IsKeyPressed(KEY_SPACE))
         {
-            Algoritmo2();
+            auto startTime = std::chrono::high_resolution_clock::now();
+            FocussedD();
+            int countColor2 = CountGridsColor2();
+            std::cout << "\033[1;35mCantidad de celdas pintadas del color del algoritmo 2: " << countColor2 << "\033[0m" << std::endl; // Obtener recuento de grids de color 2
+            auto endTime = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime).count();
+            std::cout << "\033[1;35mTiempo de ejecucion de FocussedD: " << duration << " microsegundos\033[0m" << std::endl;
         }
 
         BeginDrawing();
