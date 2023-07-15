@@ -167,7 +167,7 @@ void ClearNonTargetCells()
     }
 }
 
-void Algoritmo1()
+void Dijkstra() // Dijkstra
 {
     ClearNonTargetCells();
 
@@ -268,7 +268,7 @@ void Algoritmo1()
     }
 }
 
-void Algoritmo2()
+void FocussedD() // D* Focussed
 {
     ClearNonTargetCells();
 
@@ -461,7 +461,7 @@ void UpdateGrid()
     {
         if (originX != -1 && originY != -1 && destinationX != -1 && destinationY != -1)
         {
-            Algoritmo1();
+            Dijkstra();
         }
     }
 
@@ -470,7 +470,7 @@ void UpdateGrid()
     {
         if (originX != -1 && originY != -1 && destinationX != -1 && destinationY != -1)
         {
-            Algoritmo2();
+            FocussedD();
         }
     }
 }
@@ -496,12 +496,12 @@ int main()
 
         if (IsKeyPressed(KEY_ENTER))
         {
-            Algoritmo1();
+            Dijkstra();
         }
 
         if (IsKeyPressed(KEY_SPACE))
         {
-            Algoritmo2();
+            FocussedD();
         }
 
         BeginDrawing();
