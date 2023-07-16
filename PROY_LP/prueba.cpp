@@ -100,9 +100,6 @@ bool showEditIndicator = false;
 
 int distanceMap[100][100];
 
-int blueCount = 0;
-int purpleCount = 0;
-
 void InitializeGrid()
 {
     // Inicializar el mapa de distancias
