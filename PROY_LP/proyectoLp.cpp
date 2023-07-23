@@ -160,8 +160,8 @@ void ClearNonTargetCells()
         for (int x = 0; x < gridSizeX; x++)
         {
             if (!((gridColors[y][x].r == 230 && gridColors[y][x].g == 41 && gridColors[y][x].b == 55) ||
-                  (gridColors[y][x].r == 0 && gridColors[y][x].g == 228 && gridColors[y][x].b == 48) ||
-                  (gridColors[y][x].r == 253 && gridColors[y][x].g == 249 && gridColors[y][x].b == 0)))
+                (gridColors[y][x].r == 0 && gridColors[y][x].g == 228 && gridColors[y][x].b == 48) ||
+                (gridColors[y][x].r == 253 && gridColors[y][x].g == 249 && gridColors[y][x].b == 0)))
             {
                 gridColors[y][x] = {184, 237, 255, 255}; // celeste
             }

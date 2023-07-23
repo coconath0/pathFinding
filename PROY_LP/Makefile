@@ -8,5 +8,5 @@ build:
 	
 gatito:
 
-	rm *.exe
+	del *.exe
 
