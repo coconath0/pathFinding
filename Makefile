@@ -9,4 +9,3 @@ build:
 gatito:
 
 	del *.exe
-
